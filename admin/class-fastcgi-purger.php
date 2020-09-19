@@ -187,8 +187,33 @@ class FastCGI_Purger extends Purger
             case 'get_request':
             // Go to default case.
             default:
-                $purge_url = "https://127.0.0.1/purgeall"; // Nginx config
-                $this->do_remote_get($purge_url);
+                $purge_url = home_url() . '/*';
+                $response = wp_remote_request($purge_url, array(
+                    "method" => 'PURGE',
+                ));
+                if (is_wp_error($response)) {
+
+                    $_errors_str = implode(' - ', $response->get_error_messages());
+                    $this->log('Error purge_all. ' . $_errors_str, 'ERROR');
+
+                } else {
+                    if ($response['response']['code']) {
+
+                        switch ($response['response']['code']) {
+
+                            case 200:
+                                $this->log('- - ' . $purge_url . ' pure_all *** PURGED ***');
+                                break;
+                            case 404:
+                                $this->log('- - ' . $purge_url . ' pure_all is currently not cached');
+                                break;
+                            default:
+                                $this->log('- - ' . $purge_url . ' pure_all not found ( ' . $response['response']['code'] . "\n" . implode("\n", $response['headers']) . ' )', 'WARNING');
+
+                        }
+                    }
+
+                }
 
                 break;
 
