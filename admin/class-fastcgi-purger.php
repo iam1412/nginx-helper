@@ -187,10 +187,8 @@ class FastCGI_Purger extends Purger
             case 'get_request':
             // Go to default case.
             default:
-                $purge_url = home_url() . '/*';
-                $response = wp_remote_request($purge_url, array(
-                    "method" => 'PURGE',
-                ));
+                $purge_url = home_url() . '/purge/*';
+                $response = wp_remote_request($purge_url, );
                 if (is_wp_error($response)) {
 
                     $_errors_str = implode(' - ', $response->get_error_messages());
