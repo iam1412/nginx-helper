@@ -206,7 +206,7 @@ class FastCGI_Purger extends Purger
                                 $this->log('- - ' . $purge_url . ' pure_all is currently not cached');
                                 break;
                             default:
-                                $this->log('- - ' . $purge_url . ' pure_all not found ( ' . $response['response']['code'] . "\n" . implode("\n", $response['headers']) . ' )', 'WARNING');
+                                $this->log('- - ' . $purge_url . ' pure_all not found ( ' . $response['response']['code'] . "\n" . @implode("\n", $response['headers']) . ' )', 'WARNING');
 
                         }
                     }
